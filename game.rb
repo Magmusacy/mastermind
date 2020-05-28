@@ -7,11 +7,11 @@ class CheckColors
   def current_state(player_pick)
     console_feedback = []
     duplicates = find_duplicates(player_pick)
-    @initial_colors.each_with_index do |element,index|
+    player_pick.each_with_index do |element,index|
       case
-      when player_pick[index] == element then console_feedback << COLOR_AND_POS
-      when duplicates.include?(player_pick[index]) then next
-      when player_pick.include?(element) then console_feedback << COLOR_ONLY
+      when @initial_colors[index] == element then console_feedback << COLOR_AND_POS
+      when duplicates.include?(element) then next
+      when @initial_colors.include?(element) then console_feedback << COLOR_ONLY
       end
     end
     if console_feedback.select{|txt| txt == COLOR_AND_POS}.length == 4 
@@ -36,11 +36,25 @@ class CheckColors
   end
 end
 
+puts "Welcome to mastermind game"
+puts "Please input your role (codemaker/codecracker)"
+role = gets.chomp.downcase
+  until role == "codemaker" || role == "codecracker" do
+    puts "Choose between |codemaker| and |codecracker|"
+    role = gets.chomp.downcase
+  end
+
 computer = Ai.new
 computer_pick = computer.auto_pick_colors
+p computer_pick
 colors_check = CheckColors.new(computer_pick)
+
 puts "Available colors to choose from are: [#{Codemaker.get_colors.join(", ")}]"
-for i in 1..12
+for i in 1..13
+  if i == 13 # the game is set up for 12 rounds so 13th round without code cracked equals to codecracker's loss 
+    puts "Codecracker lost. Codemaker made the code too hard"
+    break
+  end
   puts "Please type four different colors (dash-separated)"
   player_pick = gets.chomp.downcase.split("-")
     until player_pick.length == 4 do

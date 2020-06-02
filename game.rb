@@ -89,5 +89,5 @@ if i == 12
   puts "The code was [#{colors_check.initial_colors.join("-")}]"
   puts "The code was too hard for codecracker to crack. Codemaker won this game!"
 end
-i += 1
+i += 1 
 end
